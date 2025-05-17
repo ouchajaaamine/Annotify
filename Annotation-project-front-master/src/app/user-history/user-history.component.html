@@ -1,0 +1,32 @@
+<div class="container mx-auto px-6 py-8 bg-white dark:bg-gray-900 min-h-screen user-history-component">
+  <h1 class="text-2xl font-bold text-blue-700 dark:text-blue-400 mb-6">
+    Historique des Annotations <span *ngIf="userName">- <span class="text-gray-700 dark:text-gray-200">{{ userName }}</span></span>
+  </h1>
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 table-container">
+      <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Texte 1</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Texte 2</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Classe choisie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ann of historyAnnotations; let i = index" [ngClass]="{
+          'bg-white dark:bg-gray-900': i % 2 === 0,
+          'bg-blue-50 dark:bg-gray-800': i % 2 === 1,
+          'hover:bg-blue-100 dark:hover:bg-gray-700': true
+        }">
+          <td class="px-6 py-4 font-bold text-blue-700 dark:text-blue-300">{{ ann.id }}</td>
+          <td class="px-6 py-4 text-gray-700 dark:text-gray-200">{{ ann.coupleText?.text_1 }}</td>
+          <td class="px-6 py-4 text-gray-700 dark:text-gray-200">{{ ann.coupleText?.text_2 }}</td>
+          <td class="px-6 py-4">
+            <span class="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold text-xs">{{ ann.chosenClass }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="historyAnnotations.length === 0" class="text-center text-gray-500 dark:text-gray-400 py-6">Aucune annotation trouvée.</div>
+  </div>
+</div> 

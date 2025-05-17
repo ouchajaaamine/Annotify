@@ -1,0 +1,61 @@
+<div class="container mx-auto px-6 py-8 bg-white dark:bg-gray-900 min-h-screen tasks-component">
+  <h1 class="text-2xl font-bold text-blue-700 dark:text-blue-400 mb-6">
+    Mes Tâches <span *ngIf="userName">- <span class="text-gray-700 dark:text-gray-200">{{ userName }}</span></span>
+  </h1>
+  
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card mb-6">
+    <p class="text-gray-700 dark:text-gray-200 text-base">
+      Retrouvez ici toutes vos tâches d'annotation en cours ou à venir. Utilisez les outils de recherche et de filtrage pour naviguer facilement dans vos missions.
+    </p>
+  </div>
+  
+  <div class="flex flex-col md:flex-row gap-4 mb-6">
+    <input type="text" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-400 transition" placeholder="Rechercher une tâche...">
+    <button class="flex items-center gap-2 px-4 py-3 rounded-lg bg-blue-50 dark:bg-gray-800 text-blue-600 dark:text-blue-300 font-semibold shadow hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+      <i class="fas fa-sliders-h"></i> Filtres
+    </button>
+  </div>
+  
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 card">
+    <h2 class="text-xl font-semibold text-blue-700 dark:text-blue-400 mb-4 flex items-center gap-2">
+      <i class="fas fa-tasks"></i> Liste de mes tâches
+    </h2>
+    
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 table-container">
+      <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date Limite</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Progression</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks; let i = index" [ngClass]="{
+          'bg-white dark:bg-gray-900': i % 2 === 0,
+          'bg-blue-50 dark:bg-gray-800': i % 2 === 1,
+          'hover:bg-blue-100 dark:hover:bg-gray-700': true
+        }">
+          <td class="px-6 py-4 font-bold text-blue-700 dark:text-blue-300">{{ task.id }}</td>
+          <td class="px-6 py-4 text-gray-700 dark:text-gray-200">{{ task.dateLimite | date }}</td>
+          <td class="px-6 py-4">
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-2">
+              <div class="bg-blue-600 dark:bg-blue-500 h-2.5 rounded-full" [style.width.%]="taskProgressMap[task.id] || 0"></div>
+            </div>
+            <span class="text-sm text-gray-600 dark:text-gray-300">{{ (taskProgressMap[task.id] || 0) | number:'1.2-2' }}%</span>
+          </td>
+          <td class="px-6 py-4">
+            <button class="inline-flex items-center px-3 py-1.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-200 gap-1" (click)="goToAnnotate(task.id)">
+              <i class="fas fa-arrow-right text-xs"></i>
+              <span>Accéder</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div *ngIf="tasks.length === 0" class="text-center text-gray-500 dark:text-gray-400 py-6">
+      Aucune tâche assignée.
+    </div>
+  </div>
+</div>

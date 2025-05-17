@@ -1,0 +1,87 @@
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables globales pour les couleurs */
+:root {
+  --transition-speed: 0.3s;
+  --text-color: rgb(55, 65, 81);
+  --bg-color: white;
+  --card-bg: white;
+  --header-bg: rgb(243, 244, 246);
+  --border-color: rgb(229, 231, 235);
+}
+
+.dark {
+  --text-color: rgb(229, 231, 235);
+  --bg-color: rgb(17, 24, 39);
+  --card-bg: rgb(31, 41, 55);
+  --header-bg: rgb(26, 32, 44);
+  --border-color: rgb(75, 85, 99);
+}
+
+/* Styles de transition pour le changement de thème */
+body, html {
+  transition: background-color var(--transition-speed) ease, 
+              color var(--transition-speed) ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Styles spécifiques pour le mode sombre */
+.dark, body.dark-mode {
+  color-scheme: dark;
+}
+
+/* Force dark mode pour certains composants problématiques */
+.dark .user-history-component,
+.dark .tasks-component,
+.dark .task-details-component {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+.dark .card,
+.dark .table-container,
+.dark .task-card {
+  background-color: var(--card-bg) !important;
+}
+
+/* Styles forcés pour les tables en mode sombre */
+.dark th {
+  background-color: var(--header-bg) !important;
+  color: rgb(147, 197, 253) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark td {
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark tr:hover {
+  background-color: rgb(55, 65, 81) !important;
+}
+
+/* Styles pour les inputs et boutons en mode sombre */
+.dark input, 
+.dark select, 
+.dark textarea {
+  background-color: rgb(31, 41, 55) !important;
+  color: rgb(229, 231, 235) !important;
+  border-color: rgb(75, 85, 99) !important;
+}
+
+.dark button:not(.action-btn):not([disabled]) {
+  background-color: rgb(31, 41, 55) !important;
+  color: rgb(147, 197, 253) !important;
+}
+
+/* Transitions fluides pour tous les éléments qui changent avec le thème */
+*, *::before, *::after {
+  transition: background-color var(--transition-speed) ease,
+              color var(--transition-speed) ease,
+              border-color var(--transition-speed) ease,
+              box-shadow var(--transition-speed) ease;
+}

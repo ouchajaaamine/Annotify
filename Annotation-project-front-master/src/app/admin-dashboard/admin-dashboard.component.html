@@ -1,0 +1,534 @@
+<!-- Content Area -->
+<div class="container px-6 mx-auto grid">
+    <div class="flex justify-between items-center my-6">
+        <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
+        Annotify Dashboard
+    </h2>
+        <div class="text-sm text-gray-600 dark:text-gray-400">
+            {{ currentDate }}
+        </div>
+    </div>
+    
+    <!-- Message de bienvenue -->
+    <div class="p-5 mb-8 bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl shadow-md border border-indigo-200 dark:border-indigo-800/50">
+        <div class="flex items-start">
+            <div class="mr-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full p-3 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Bonjour dans votre espace d'administration</h3>
+                <p class="text-gray-700 dark:text-gray-300">
+                    Bienvenue sur votre tableau de bord de gestion des annotations. Vous pouvez superviser ici l'ensemble des activités, gérer les jeux de données et suivre les performances des annotateurs. Utilisez les statistiques ci-dessous pour prendre des décisions éclairées sur votre projet d'annotation.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="flex justify-center items-center p-12">
+        <div class="flex flex-col items-center">
+            <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+            <p class="mt-4 text-gray-600 dark:text-gray-400">Chargement des données...</p>
+        </div>
+    </div>
+    
+    <!-- Error Message -->
+    <div *ngIf="error" class="p-4 mb-6 bg-red-100 text-red-700 rounded-lg">
+        <div class="flex items-center">
+            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            <span>{{ error }}</span>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div *ngIf="!isLoading && !error" class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+        <!-- Datasets Card -->
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 transform transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z"></path>
+                    <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z"></path>
+                    <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Total Datasets
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    {{ stats?.totalDatasets || 0 }}
+                </p>
+                <div class="text-xs text-gray-500 mt-1">
+                    <span class="text-green-500">{{ stats?.completedDatasets || 0 }}</span> complétés,
+                    <span class="text-blue-500">{{ stats?.inProgressDatasets || 0 }}</span> en cours
+                </div>
+            </div>
+        </div>
+        
+        <!-- Annotateurs Card -->
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 transform transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Total Annotateurs
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    {{ stats?.totalAnnotateurs || 0 }}
+                </p>
+                <div class="text-xs text-gray-500 mt-1">
+                    <span class="text-green-500">{{ stats?.activeAnnotateurs || 0 }}</span> actifs,
+                    <span class="text-yellow-500">{{ stats?.temporalStats?.recentActiveAnnotateurs || 0 }}</span> récemment
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animations Card -->
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 transform transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <div class="p-3 mr-4 text-purple-500 bg-purple-100 rounded-full dark:text-purple-100 dark:bg-purple-500">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Annotations Totales
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    {{ stats?.totalAnnotations || 0 }}
+                </p>
+                <div class="text-xs text-gray-500 mt-1">
+                    <span class="text-indigo-500">{{ stats?.temporalStats?.recentAnnotations || 0 }}</span> récentes,
+                    <span class="text-purple-500">{{ stats?.annotationStats?.avgAnnotationsPerAnnotateur || '0' }}</span> /annotateur
+                </div>
+            </div>
+        </div>
+        
+        <!-- Taux de Complétion Card -->
+        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 transform transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <div class="p-3 mr-4 text-yellow-500 bg-yellow-100 rounded-full dark:text-yellow-100 dark:bg-yellow-500">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Taux d'Activité
+                </p>
+                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                    {{ stats?.temporalStats?.recentActivityRate || '0' }}%
+                </p>
+                <div class="text-xs text-gray-500 mt-1">
+                    <span class="text-yellow-600">{{ stats?.activeTasks || 0 }}</span> tâches actives
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sections Datasets layout -->
+    <div *ngIf="!isLoading && !error" class="flex flex-row flex-wrap gap-6 mb-8">
+        <!-- Répartition des Datasets -->
+        <div class="flex-1 min-w-0 p-6 bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between mb-6">
+                <h4 class="text-xl font-bold text-gray-800 dark:text-white">
+                    Répartition des Datasets
+                </h4>
+                <div class="text-sm font-semibold px-3 py-1.5 bg-purple-100 dark:bg-purple-600 bg-opacity-70 dark:bg-opacity-30 text-purple-800 dark:text-purple-100 rounded-full border border-purple-300 dark:border-purple-500 shadow-glow">
+                    Total: {{ stats?.totalDatasets || 0 }}
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-center justify-center gap-6">
+                <!-- Pie Chart similaire à l'image de référence -->
+                <div class="pie-chart-container mb-4">
+                    <div class="relative w-64 h-64 mx-auto">
+                        <!-- Cercle d'arrière-plan pour donner un effet de profondeur -->
+                        <div class="absolute inset-0 rounded-full bg-gray-200 dark:bg-gray-700 shadow-inner opacity-30"></div>
+                        
+                        <svg width="100%" height="100%" viewBox="0 0 100 100">
+                            <!-- Segments du camembert avec effet de lumière -->
+                            <defs>
+                                <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#000000" flood-opacity="0.3"/>
+                                </filter>
+                                
+                                <!-- Définition des gradients -->
+                                <linearGradient id="completedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#4ade80" /> <!-- emerald-400 -->
+                                    <stop offset="100%" stop-color="#059669" /> <!-- emerald-600 -->
+                                </linearGradient>
+                                
+                                <linearGradient id="inProgressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#60a5fa" /> <!-- blue-400 -->
+                                    <stop offset="100%" stop-color="#2563eb" /> <!-- blue-600 -->
+                                </linearGradient>
+                                
+                                <linearGradient id="unassignedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#fbbf24" /> <!-- orange-400 -->
+                                    <stop offset="100%" stop-color="#d97706" /> <!-- orange-600 -->
+                                </linearGradient>
+                                
+                                <!-- Filtres pour l'effet hover -->
+                                <filter id="hover-glow-green" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feFlood flood-color="#4ade80" flood-opacity="0.5" result="color" />
+                                    <feComposite in="color" in2="blur" operator="in" result="glow" />
+                                    <feMerge>
+                                        <feMergeNode in="glow" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                                
+                                <filter id="hover-glow-blue" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feFlood flood-color="#60a5fa" flood-opacity="0.5" result="color" />
+                                    <feComposite in="color" in2="blur" operator="in" result="glow" />
+                                    <feMerge>
+                                        <feMergeNode in="glow" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                                
+                                <filter id="hover-glow-orange" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feFlood flood-color="#fbbf24" flood-opacity="0.5" result="color" />
+                                    <feComposite in="color" in2="blur" operator="in" result="glow" />
+                                    <feMerge>
+                                        <feMergeNode in="glow" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <g *ngIf="stats">
+                                <!-- Segment pour les datasets complétés (vert) -->
+                                <path *ngIf="stats.completedDatasets > 0"
+                                    [attr.d]="createPieSegment(0, getCompletedRatio() * 360)"
+                                    fill="url(#completedGradient)"
+                                    stroke="#fff"
+                                    stroke-width="0.5"
+                                    class="pie-segment completed-segment">
+                                </path>
+                                
+                                <!-- Segment pour les datasets en cours (bleu) -->
+                                <path *ngIf="stats.inProgressDatasets > 0"
+                                    [attr.d]="createPieSegment(getCompletedRatio() * 360, 
+                                        getCompletedRatio() * 360 + getInProgressRatio() * 360)"
+                                    fill="url(#inProgressGradient)"
+                                    stroke="#fff"
+                                    stroke-width="0.5"
+                                    class="pie-segment in-progress-segment">
+                                </path>
+                                
+                                <!-- Segment pour les datasets non assignés (orange) -->
+                                <path *ngIf="stats.unassignedDatasets > 0"
+                                    [attr.d]="createPieSegment(getCompletedRatio() * 360 + getInProgressRatio() * 360, 
+                                        getCompletedRatio() * 360 + getInProgressRatio() * 360 + getUnassignedRatio() * 360)"
+                                    fill="url(#unassignedGradient)"
+                                    stroke="#fff"
+                                    stroke-width="0.5"
+                                    class="pie-segment unassigned-segment">
+                                </path>
+                                
+                                <!-- Centre du graphique avec le total -->
+                                <circle cx="50" cy="50" r="20" fill="#1f2937" stroke="#374151" stroke-width="1"></circle>
+                                <text x="50" y="48" text-anchor="middle" font-weight="bold" class="text-center text-white" style="font-size: 8px; fill: white;">{{ stats.totalDatasets || 0 }}</text>
+                                <text x="50" y="56" text-anchor="middle" class="text-xs uppercase text-center" style="font-size: 3px; fill: #9ca3af;">DATASETS</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center space-x-4 mb-2">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 mr-2"></div>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">Complétés ({{ stats?.completedDatasets || 0 }})</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 mr-2"></div>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">En cours ({{ stats?.inProgressDatasets || 0 }})</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 mr-2"></div>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">Non assignés ({{ stats?.unassignedDatasets || 0 }})</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-4 py-4 hidden">
+                    <div class="flex items-center p-3 bg-gradient-to-r from-emerald-50 to-emerald-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-emerald-300 dark:border-emerald-500 border-opacity-30 transition-all duration-300 hover:border-opacity-60 shadow-md hover:shadow-emerald-300/20 dark:hover:shadow-emerald-500/20 legend-item">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 mr-4 shadow-lg shadow-emerald-300/30 dark:shadow-emerald-500/30 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-emerald-700 dark:text-emerald-300">Complétés</h3>
+                            <div class="flex items-center">
+                                <span class="text-xl font-semibold text-emerald-800 dark:text-emerald-100">{{ stats?.completedDatasets || 0 }}</span>
+                                <span class="text-xs text-emerald-600 dark:text-emerald-400 ml-2">({{ Math.round(getCompletedRatio() * 100) || 0 }}%)</span>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-blue-300 dark:border-blue-500 border-opacity-30 transition-all duration-300 hover:border-opacity-60 shadow-md hover:shadow-blue-300/20 dark:hover:shadow-blue-500/20 legend-item">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 mr-4 shadow-lg shadow-blue-300/30 dark:shadow-blue-500/30 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-blue-700 dark:text-blue-300">En cours</h3>
+                            <div class="flex items-center">
+                                <span class="text-xl font-semibold text-blue-800 dark:text-blue-100">{{ stats?.inProgressDatasets || 0 }}</span>
+                                <span class="text-xs text-blue-600 dark:text-blue-400 ml-2">({{ Math.round(getInProgressRatio() * 100) || 0 }}%)</span>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-orange-300 dark:border-orange-500 border-opacity-30 transition-all duration-300 hover:border-opacity-60 shadow-md hover:shadow-orange-300/20 dark:hover:shadow-orange-500/20 legend-item">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 mr-4 shadow-lg shadow-orange-300/30 dark:shadow-orange-500/30 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-orange-700 dark:text-orange-300">Non assignés</h3>
+                            <div class="flex items-center">
+                                <span class="text-xl font-semibold text-orange-800 dark:text-orange-100">{{ stats?.unassignedDatasets || 0 }}</span>
+                                <span class="text-xs text-orange-600 dark:text-orange-400 ml-2">({{ Math.round(getUnassignedRatio() * 100) || 0 }}%)</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Avancement des Datasets -->
+        <div class="flex-1 min-w-0 p-6 bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between mb-6">
+                <h4 class="text-xl font-bold text-gray-800 dark:text-white">
+                    Avancement des Datasets
+                </h4>
+                <div class="text-sm font-medium text-purple-700 dark:text-purple-300">
+                    <a [routerLink]="['/admin/datasets']" class="hover:underline hover:text-purple-800 dark:hover:text-purple-200 flex items-center gap-1">
+                        Voir tous
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Loader spécifique pour les datasets -->
+            <div *ngIf="isDatasetsLoading" class="flex justify-center items-center py-10">
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Chargement des données...</p>
+                </div>
+            </div>
+            
+            <!-- Contenu des datasets -->
+            <div *ngIf="!isDatasetsLoading" class="space-y-6">
+                <!-- Affichage des données d'annotation de l'API -->
+                <div *ngFor="let dataset of datasetAnnotations; let i = index" 
+                     class="bg-gray-100 dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-50 rounded-lg p-4 border border-gray-300 dark:border-gray-700 shadow-lg transition-all duration-300 hover:border-indigo-400 dark:hover:border-indigo-500 hover:border-opacity-50 dark:hover:border-opacity-50">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-base font-semibold text-gray-800 dark:text-white flex-1 truncate mr-3">{{ dataset.datasetName }}</span>
+                        <div class="flex items-center">
+                            <div class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 bg-opacity-70 dark:bg-opacity-30 border border-indigo-300 dark:border-indigo-500 border-opacity-50 dark:border-opacity-30 rounded-l-lg flex items-center">
+                                <span class="text-md font-bold text-indigo-700 dark:text-purple-300">{{ dataset.annotationsCount }}</span>
+                                <span class="text-gray-600 dark:text-gray-400 mx-1">/</span>
+                                <span class="text-md font-bold text-indigo-700 dark:text-purple-300">{{ dataset.totalCouples }}</span>
+                    </div>
+                            <div class="px-2 py-1 bg-indigo-500 dark:bg-indigo-700 text-sm font-semibold text-white rounded-r-lg">
+                                {{ dataset.completionPercentage }}%
+                    </div>
+                </div>
+                    </div>
+                    <div class="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-3 mb-1">
+                        <div class="h-3 rounded-full transition-all duration-500 relative overflow-hidden"
+                            [ngStyle]="{
+                                'width': dataset.completionPercentage + '%',
+                                'background': getProgressGradient(+dataset.completionPercentage)
+                            }">
+                            <div class="absolute inset-0 bg-white opacity-20 animate-pulse-slow"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Message si aucune donnée disponible -->
+                <div *ngIf="!datasetAnnotations || datasetAnnotations.length === 0" 
+                     class="text-center py-8 text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 bg-opacity-70 dark:bg-opacity-50 rounded-lg">
+                    <svg class="w-12 h-12 mx-auto text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    Aucune donnée d'avancement disponible
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meilleurs Annotateurs Section -->
+    <div *ngIf="!isLoading && !error" class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 mb-8 clear-both">
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
+                Meilleurs Annotateurs
+            </h4>
+            <div class="text-sm font-medium text-purple-600">
+                <a [routerLink]="['/admin/annotateurs']" class="hover:underline">Voir tous</a>
+            </div>
+        </div>
+        <div class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-800">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Annotateur</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Annotations</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Performance</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                    <tr *ngFor="let annotateur of meilleursAnnotateurs">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ annotateur.nom }}</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 ml-2">{{ annotateur.email }}</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900 dark:text-gray-100">{{ annotateur.annotations }}</div>
+                        </td>
+                        
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                [ngClass]="{
+                                    'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100': annotateur.couleurPerformance === 'green',
+                                    'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100': annotateur.couleurPerformance === 'blue',
+                                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100': annotateur.couleurPerformance === 'yellow'
+                                }">
+                                {{ annotateur.performance }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Ajoute les classes d'animation -->
+<style>
+    @keyframes pulse-slow {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.8;
+        }
+    }
+    .animate-pulse-slow {
+        animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    .shadow-glow {
+        box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes scaleIn {
+        from { transform: scale(0.9); }
+        to { transform: scale(1); }
+    }
+    
+    @keyframes rotateIn {
+        from { transform: rotate(-15deg); }
+        to { transform: rotate(0); }
+    }
+    
+    .chart-animate {
+        animation: fadeIn 0.8s ease-out, scaleIn 0.8s ease-out;
+    }
+    
+    .segment-animate {
+        animation: fadeIn 1s ease-out;
+        transition: all 0.3s ease;
+    }
+    
+    .segment-animate:hover {
+        filter: brightness(1.1);
+    }
+    
+    .legend-item {
+        transition: all 0.3s ease;
+    }
+    
+    .legend-item:hover {
+        transform: translateX(5px);
+    }
+    
+    /* Styles pour le pie chart */
+    .pie-chart-container {
+        animation: fadeIn 0.8s ease-out, scaleIn 0.8s ease-out;
+    }
+    
+    .pie-chart-container svg path {
+        transition: all 0.4s ease;
+        cursor: pointer;
+    }
+    
+    /* Effets de hover avancés pour les segments */
+    .pie-chart-container .pie-segment {
+        transition: all 0.4s ease-out;
+    }
+    
+    .pie-chart-container .pie-segment:hover {
+        transform: scale(1.03) translateY(-2px);
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    }
+    
+    /* Effets spécifiques par type de segment */
+    .pie-chart-container .completed-segment:hover {
+        filter: url(#hover-glow-green) drop-shadow(0 0 8px rgba(74, 222, 128, 0.6));
+    }
+    
+    .pie-chart-container .in-progress-segment:hover {
+        filter: url(#hover-glow-blue) drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    }
+    
+    .pie-chart-container .unassigned-segment:hover {
+        filter: url(#hover-glow-orange) drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+    }
+    
+    /* Animation pour les labels */
+    .pie-chart-container svg g .label-bg {
+        transition: all 0.3s ease;
+    }
+    
+    .pie-chart-container svg g:hover .label-bg {
+        fill-opacity: 1;
+        r: 8;
+    }
+    
+    /* Animation pulse subtile pour le centre */
+    @keyframes pulse-center {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.9; transform: scale(0.98); }
+    }
+    
+    .pie-chart-container circle[cx="50"][cy="50"] {
+        animation: pulse-center 3s infinite ease-in-out;
+    }
+</style>
+
+
+
+

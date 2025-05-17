@@ -1,0 +1,53 @@
+<div class="annotation-container bg-white dark:bg-gray-900 min-h-screen p-6 rounded-lg shadow-lg task-details-component">
+  <div class="header flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-blue-700 dark:text-blue-400">Task Annotation</h2>
+    <button class="dashboard-btn px-4 py-2 rounded-lg bg-blue-600 text-white dark:bg-blue-800 dark:text-blue-200 shadow hover:bg-blue-700 dark:hover:bg-blue-900 transition" routerLink="/user/tasks">Back to Dashboard</button>
+  </div>
+
+  <div *ngIf="loading" class="loading text-center text-blue-600 dark:text-blue-300">Loading...</div>
+  <div *ngIf="error" class="error text-center text-red-600 dark:text-red-400">{{ error }}</div>
+
+  <div *ngIf="!loading && !error" class="main-content">
+    <div class="progress-bar w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full mb-6 overflow-hidden">
+      <div class="progress h-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-800" [style.width.%]="((currentIndex+1)/totalCouples)*100"></div>
+    </div>
+
+    <div class="task-details-card bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6 card">
+      <div class="text-card mb-2 text-gray-700 dark:text-blue-100 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"><strong>Text 1:</strong> "{{ currentCouple?.text_1 }}"</div>
+      <div class="text-card mb-2 text-gray-700 dark:text-blue-100 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"><strong>Text 2:</strong> "{{ currentCouple?.text_2 }}"</div>
+      <div class="status-section flex items-center gap-4 mt-2">
+        <div class="status-badge px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold text-xs" [class.annotated]="currentCouple?.status === 'Annoté'">
+          {{ currentCouple?.status || 'Non annoté' }}
+        </div>
+        <div *ngIf="currentCouple?.annotationClass" class="annotation-class text-sm text-gray-700 dark:text-blue-200">
+          Classe sélectionnée: <span class="class-badge px-2 py-1 rounded bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 font-semibold">{{ currentCouple?.annotationClass }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation-section bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6 card">
+      <h3 class="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-3">Select Annotation Class</h3>
+      <div class="class-buttons flex gap-3 mb-4">
+        <button *ngFor="let c of classes"
+                class="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-blue-50 dark:bg-gray-900 text-blue-700 dark:text-blue-300 font-semibold shadow hover:bg-blue-100 dark:hover:bg-gray-700 transition"
+                [class.selected]="selectedClass === c.textClass"
+                (click)="selectedClass = c.textClass">
+          {{ c.textClass }}
+        </button>
+      </div>
+      <button class="save-btn px-6 py-2 rounded-lg bg-blue-600 text-white dark:bg-blue-800 dark:text-blue-200 font-semibold shadow hover:bg-blue-700 dark:hover:bg-blue-900 transition"
+              [disabled]="!selectedClass || selectedClass === currentCouple?.annotationClass" 
+              (click)="annotateCurrentCouple()">
+        {{ currentCouple?.status === 'Annoté' ? 'Update Annotation' : 'Save Annotation' }}
+      </button>
+    </div>
+
+    <div *ngIf="notification" class="notification text-center text-green-600 dark:text-green-400 mb-4">{{ notification }}</div>
+
+    <div class="navigation flex justify-between items-center mt-6">
+      <button class="px-4 py-2 rounded-lg bg-blue-100 dark:bg-gray-800 text-blue-700 dark:text-blue-300 font-semibold shadow hover:bg-blue-200 dark:hover:bg-gray-700 transition" (click)="goToPreviousCouple()" [disabled]="currentIndex === 0">Previous</button>
+      <span class="text-gray-700 dark:text-gray-200">Page {{ currentIndex + 1 }} of {{ totalCouples }}</span>
+      <button class="px-4 py-2 rounded-lg bg-blue-100 dark:bg-gray-800 text-blue-700 dark:text-blue-300 font-semibold shadow hover:bg-blue-200 dark:hover:bg-gray-700 transition" (click)="goToNextCouple()" [disabled]="currentIndex === totalCouples - 1">Next</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="container mx-auto px-6 grid">
+  <div class="flex flex-col gap-4 my-8">
+    <h1 class="text-3xl font-bold text-blue-700 dark:text-blue-400">
+      Annotator Dashboard <span *ngIf="userName">- <span class="text-gray-700 dark:text-gray-200">{{ userName }}</span></span>
+    </h1>
+    <!-- Message de bienvenue amélioré -->
+    <div class="p-5 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-2xl shadow-md border border-blue-200 dark:border-blue-800/50">
+      <div class="flex items-start">
+        <div class="mr-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-3 shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">Bienvenue dans votre espace d'annotation</h3>
+          <p class="text-gray-700 dark:text-gray-300">
+            Depuis ce tableau de bord, vous pouvez accéder à vos tâches d'annotation, suivre votre progression et consulter votre historique. Chaque annotation que vous effectuez contribue à améliorer la qualité des données du projet. N'hésitez pas à explorer les différentes fonctionnalités mises à votre disposition pour une expérience optimale.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 transform transition-all duration-300 hover:shadow-lg hover:scale-105">
+        <div class="p-3 mr-4 text-blue-500 bg-blue-100 rounded-full dark:text-blue-100 dark:bg-blue-500">
+          <i class="fas fa-wave-square"></i>
+        </div>
+        <div>
+          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">TOTAL TASKS</p>
+          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ totalTasks }}</p>
+        </div>
+      </div>
+      <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 transform transition-all duration-300 hover:shadow-lg hover:scale-105">
+        <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <div>
+          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">COMPLETED TASKS</p>
+          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ completedTasks }}</p>
+        </div>
+      </div>
+      <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800 transform transition-all duration-300 hover:shadow-lg hover:scale-105">
+        <div class="p-3 mr-4 text-purple-500 bg-purple-100 rounded-full dark:text-purple-100 dark:bg-purple-500">
+          <i class="fas fa-wave-square"></i>
+        </div>
+        <div>
+          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">IN PROGRESS TASKS</p>
+          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ inProgressTasks }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row gap-4 mt-6">
+      <input type="text" class="flex-1 px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 shadow focus:outline-none focus:ring-2 focus:ring-blue-400 transition" placeholder="Search tasks or datasets...">
+      <button class="flex items-center gap-2 px-4 py-3 rounded-lg bg-blue-50 dark:bg-gray-800 text-blue-600 dark:text-blue-300 font-semibold shadow hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+        <i class="fas fa-sliders-h"></i> Filters
+      </button>
+    </div>
+    <!-- Bloc horizontal Tasks + Historique -->
+    <div class="flex flex-col xl:flex-row gap-6 mt-6">
+      <!-- Tasks List (3 premiers) -->
+      <div class="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col">
+        <div class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Tasks List</div>
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Task ID</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Dataset Name</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Progress</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+            <tr *ngFor="let task of tasks | slice:0:3">
+              <td class="px-6 py-4 font-bold text-blue-700 dark:text-blue-300">{{ task.id }}</td>
+              <td class="px-6 py-4 font-bold text-gray-800 dark:text-gray-100">{{ task.datasetName }}</td>
+              <td class="px-6 py-4 text-gray-700 dark:text-gray-200">{{ task.description }}</td>
+              <td class="px-6 py-4">
+                <div class="w-32 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div class="h-3 rounded-full bg-gradient-to-r from-blue-400 to-blue-600" [style.width.%]="taskProgressMap[task.id] || 0"></div>
+                </div>
+                <span class="ml-2 text-blue-600 dark:text-blue-400 font-semibold">{{ (taskProgressMap[task.id] || 0) | number:'1.2-2' }}%</span>
+              </td>
+              <td class="px-6 py-4">
+                <button class="p-2 rounded-full bg-blue-50 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-gray-700 transition">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <a routerLink="/user/tasks" class="mt-4 self-end px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition">Voir toutes les tâches</a>
+      </div>
+      <!-- Historique (3 premiers) -->
+      <div class="flex-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex flex-col">
+        <div class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">Historique des Annotations</div>
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">ID</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Texte 1</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Texte 2</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Classe choisie</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+            <tr *ngFor="let ann of lastThreeAnnotations">
+              <td class="px-6 py-4 font-bold text-blue-700 dark:text-blue-300">{{ ann.id }}</td>
+              <td class="px-6 py-4 text-gray-700 dark:text-gray-200">{{ ann.coupleText?.text_1 }}</td>
+              <td class="px-6 py-4 text-gray-700 dark:text-gray-200">{{ ann.coupleText?.text_2 }}</td>
+              <td class="px-6 py-4">
+                <span class="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold text-xs">{{ ann.chosenClass }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <a routerLink="/user/history" class="mt-4 self-end px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition">Voir tout l'historique</a>
+      </div>
+    </div>
+  </div>
+</div>

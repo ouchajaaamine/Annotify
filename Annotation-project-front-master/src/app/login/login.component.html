@@ -1,0 +1,220 @@
+<div class="min-h-screen bg-gradient-to-br from-[#0a1023] via-[#131b36] to-[#0e1429] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden relative">
+  <!-- Animated background elements -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full">
+      <!-- Animated circles -->
+      <div class="absolute top-[10%] left-[15%] w-80 h-80 bg-purple-600/10 rounded-full filter blur-[80px] animate-pulse"></div>
+      <div class="absolute top-[40%] right-[15%] w-96 h-96 bg-indigo-600/10 rounded-full filter blur-[100px] animate-pulse" style="animation-delay: 1s;"></div>
+      <div class="absolute bottom-[10%] left-[25%] w-72 h-72 bg-blue-500/10 rounded-full filter blur-[70px] animate-pulse" style="animation-delay: 2s;"></div>
+      
+      <!-- Animated gradients -->
+      <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-b from-indigo-500/20 to-transparent transform rotate-45 opacity-30"></div>
+      <div class="absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-t from-purple-600/20 to-transparent transform -rotate-45 opacity-30"></div>
+    </div>
+    
+    <!-- Grid overlay -->
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTkuNSA2MEgwVjBoNjBsLS41IDYweiIgc3Ryb2tlPSIjMjAyNDM0IiBzdHJva2Utd2lkdGg9Ii41IiBmaWxsPSJub25lIi8+PC9zdmc+')] opacity-10"></div>
+  </div>
+
+  <!-- Conteneur du formulaire -->
+  <div class="w-full max-w-md z-10 perspective-1000">
+    <div 
+      class="bg-gradient-to-b from-[#1a2035] to-[#141b2d] p-8 rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-[#292f46]/50 backdrop-blur-sm transition-all duration-700 transform"
+      [ngStyle]="{'transform': isFormVisible ? 'rotateX(0) translateY(0)' : 'rotateX(10deg) translateY(40px)', 'opacity': isFormVisible ? '1' : '0'}"
+    >
+      <!-- Floating particles inside the form -->
+      <div class="absolute inset-0 overflow-hidden rounded-3xl">
+        <div class="particle absolute h-1 w-1 rounded-full bg-indigo-400/70 top-[20%] left-[15%] animate-float-slow"></div>
+        <div class="particle absolute h-1.5 w-1.5 rounded-full bg-purple-400/70 top-[60%] right-[20%] animate-float-slow" style="animation-delay: 1s;"></div>
+        <div class="particle absolute h-1 w-1 rounded-full bg-blue-400/70 bottom-[15%] left-[30%] animate-float-slow" style="animation-delay: 2s;"></div>
+        <div class="particle absolute h-2 w-2 rounded-full bg-indigo-400/70 top-[35%] right-[15%] animate-float-slow" style="animation-delay: 3s;"></div>
+      </div>
+      
+      <!-- Shine effect -->
+      <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-white/[0.05] via-transparent to-transparent"></div>
+      
+      <!-- Logo et titre -->
+      <div class="text-center mb-8 relative">
+        <div class="flex justify-center mb-6 group perspective">
+          <div class="inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-[#4f46e5] via-[#6366f1] to-[#7c3aed] shadow-lg shadow-indigo-500/30 overflow-hidden border border-indigo-500/20 transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 relative">
+            <!-- Inner glow effect -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent"></div>
+            
+            <!-- Logo icon with 3D effect - Annotify Logo (bulle de chat avec coche) -->
+            <div class="relative z-10 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white drop-shadow-[0_2px_3px_rgba(0,0,0,0.3)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+            </div>
+
+            <!-- Accent circles -->
+            <div class="absolute top-1 right-1 h-2 w-2 rounded-full bg-white/30"></div>
+            <div class="absolute bottom-1 left-1 h-2 w-2 rounded-full bg-white/20"></div>
+          </div>
+        </div>
+        
+        <h2 class="text-4xl font-bold tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] bg-clip-text text-transparent bg-gradient-to-r from-[#818cf8] to-[#c4b5fd] mb-2 transition-all duration-500 transform hover:scale-105">
+          Annotify
+        </h2>
+        
+        <p class="mt-2 text-[#94a3b8] text-lg">
+          <span class="inline-block animate-fade-in-up" style="animation-delay: 100ms;">Connectez-vous </span>
+        </p>
+      </div>
+      
+      <!-- Divider with glow -->
+      <div class="relative h-px w-full bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent my-8 after:content-[''] after:absolute after:inset-0 after:blur-sm after:bg-gradient-to-r after:from-transparent after:via-indigo-500/50 after:to-transparent"></div>
+      
+      <!-- Formulaire -->
+      <form (ngSubmit)="onSubmit()" class="space-y-7">
+        <div class="transform transition-all duration-500 hover:translate-x-1 focus-within:translate-x-1">
+          <label for="username" class="block text-sm font-medium text-[#cbd5e1] mb-2 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            </svg>
+            Nom d'utilisateur
+          </label>
+          <div class="relative mt-1 group">
+            <input 
+              id="username" 
+              name="username" 
+              type="text" 
+              [(ngModel)]="username" 
+              required 
+              class="w-full py-3.5 px-5 bg-[#1e293b]/80 text-white placeholder-[#64748b] border border-[#334155] group-hover:border-indigo-500/70 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 rounded-xl transition-all duration-300 shadow-sm backdrop-blur-sm"
+              placeholder="Entrez votre identifiant"
+            >
+            <!-- Input glow effect -->
+            <div class="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <div class="absolute inset-0 rounded-xl shadow-[0_0_15px_3px_rgba(99,102,241,0.15)]"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="transform transition-all duration-500 hover:translate-x-1 focus-within:translate-x-1">
+          <label for="password" class="block text-sm font-medium text-[#cbd5e1] mb-2 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+            Mot de passe
+          </label>
+          <div class="relative mt-1 group">
+            <input 
+              id="password" 
+              name="password" 
+              type="password" 
+              [(ngModel)]="password" 
+              required 
+              class="w-full py-3.5 px-5 bg-[#1e293b]/80 text-white placeholder-[#64748b] border border-[#334155] group-hover:border-indigo-500/70 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 rounded-xl transition-all duration-300 shadow-sm backdrop-blur-sm"
+              placeholder="Entrez votre mot de passe"
+            >
+            <!-- Input glow effect -->
+            <div class="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <div class="absolute inset-0 rounded-xl shadow-[0_0_15px_3px_rgba(99,102,241,0.15)]"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div *ngIf="errorMessage" class="error-message text-sm text-red-200 bg-red-900/40 border border-red-500/40 rounded-xl p-4 animate-shake shadow-[0_0_15px_2px_rgba(239,68,68,0.15)]">
+          <div class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-red-300" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+            {{ errorMessage }}
+          </div>
+        </div>
+        
+        <div class="pt-2">
+          <button 
+            type="submit" 
+            [disabled]="isLoading"
+            class="group relative w-full flex justify-center py-3.5 px-5 text-base font-medium rounded-xl text-white overflow-hidden transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <!-- Button background with gradient and animation -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#4f46e5] via-[#6366f1] to-[#7c3aed] transition-all duration-300 group-hover:scale-105 rounded-xl"></div>
+            
+            <!-- Button shine effect -->
+            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div class="absolute inset-[-10%] w-[120%] h-[200%] top-[-50%] bg-gradient-to-r from-transparent via-white/20 to-transparent transform rotate-12 transition-transform duration-700 group-hover:translate-x-[100%]"></div>
+            </div>
+            
+            <!-- Button border glow -->
+            <div class="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+              <div class="absolute inset-0 rounded-xl shadow-[0_0_15px_3px_rgba(99,102,241,0.4)]"></div>
+            </div>
+            
+            <!-- Button base effects -->
+            <div class="absolute bottom-0 inset-x-0 h-1 bg-white/20 rounded-b-xl"></div>
+            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+            
+            <!-- Button spinner -->
+            <span class="absolute right-5 z-10" *ngIf="isLoading">
+              <svg class="animate-spin h-5 w-5 text-indigo-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </span>
+            
+            <!-- Button label with icon -->
+            <span class="relative z-10 flex items-center">
+              <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+              {{ isLoading ? 'Connexion en cours...' : 'Se connecter' }}
+            </span>
+          </button>
+        </div>
+      </form>
+      
+      <!-- Animated footer decoration -->
+      <div class="absolute bottom-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#4f46e5]/0 via-[#4f46e5]/70 to-[#4f46e5]/0 rounded-b-3xl"></div>
+    </div>
+  </div>
+  
+  <!-- Extra decorations -->
+  <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-xs text-indigo-300/50">© 2023 Annotation Platform • Tous droits réservés</div>
+</div>
+
+<!-- Add these styles to your component CSS -->
+<style>
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-10px) translateX(5px); }
+    50% { transform: translateY(5px) translateX(-5px); }
+    75% { transform: translateY(-5px) translateX(-10px); }
+  }
+  
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-float-slow {
+    animation: float-slow 8s ease-in-out infinite;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .perspective {
+    perspective: 1000px;
+  }
+  
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .animate-shake {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
+</style>
