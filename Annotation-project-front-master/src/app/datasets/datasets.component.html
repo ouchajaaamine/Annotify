@@ -244,6 +244,13 @@
                   (click)="openAssignModal(dataset.id)">
                   <i class="fas fa-user-plus"></i>
                 </button>
+                <button 
+                  *ngIf="getProgress(dataset) === 100"
+                  class="px-2 py-1 text-xs text-green-600 bg-green-100 dark:bg-green-900 dark:text-green-300 rounded-md hover:bg-green-200 dark:hover:bg-green-800"
+                  title="Télécharger CSV" 
+                  (click)="downloadDataset(dataset)">
+                  <i class="fas fa-download"></i>
+                </button>
               </div>
             </td>
           </tr>

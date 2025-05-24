@@ -451,4 +451,28 @@ export class DatasetsComponent implements OnInit {
       }
     });
   }
+
+  downloadDataset(dataset: Dataset) {
+    this.datasetsService.downloadDataset(dataset.id).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${dataset.name.replace(/\s+/g, '_')}_annotated.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading dataset:', error);
+        // Gérer l'erreur si le dataset n'est pas complètement annoté
+        if (error.status === 400) {
+          alert('Le dataset n\'est pas complètement annoté');
+        } else {
+          alert('Erreur lors du téléchargement du dataset');
+        }
+      }
+    });
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, map, catchError, throwError, forkJoin } from 'rxjs';
+import { Observable, map, catchError, throwError, forkJoin, switchMap } from 'rxjs';
 
 export interface Annotateur { id: number; login: string; role: string; }
 export interface Couple {
@@ -32,6 +32,14 @@ export interface DatasetView {
 }
 
 export interface DatasetAnnotationStatus {
+  annotationsCount: number;
+  completionPercentage: string;
+  totalCouples: number;
+  datasetName: string;
+  datasetId: number;
+}
+
+export interface DatasetAnnotationCount {
   annotationsCount: number;
   completionPercentage: string;
   totalCouples: number;
@@ -240,6 +248,33 @@ export class AdminDatasetsService {
       catchError(error => {
         console.error('Error fetching multiple dataset annotation statuses:', error);
         return throwError(() => new Error('Failed to load multiple dataset annotation statuses'));
+      })
+    );
+  }
+
+  getDatasetAnnotationCount(datasetId: number): Observable<DatasetAnnotationCount> {
+    return this.http.get<DatasetAnnotationCount>(`http://localhost:8080/admin/dataset/${datasetId}/annotations/count`);
+  }
+
+  getAllDatasetsAnnotationCounts(): Observable<DatasetAnnotationCount[]> {
+    return this.getDatasetsCouplesCount().pipe(
+      switchMap(data => {
+        const datasetIds = Object.keys(data.datasetsWithCouples).map(id => parseInt(id));
+        const requests = datasetIds.map(id => this.getDatasetAnnotationCount(id));
+        return forkJoin(requests);
+      })
+    );
+  }
+
+  downloadDataset(datasetId: number): Observable<Blob> {
+    const headers = this.getHeaders();
+    return this.http.get(`${this.apiUrl}/${datasetId}/download`, {
+      headers,
+      responseType: 'blob'
+    }).pipe(
+      catchError(error => {
+        console.error('Error downloading dataset:', error);
+        return throwError(() => new Error(error.error?.error || 'Failed to download dataset'));
       })
     );
   }

@@ -143,16 +143,61 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   // Charger les statistiques générales
   loadStats() {
     this.isLoading = true;
+    
+    // Charger d'abord les statistiques de base
     this.datasetsService.getDashboardStats().subscribe({
       next: (stats) => {
         console.log('Dashboard stats loaded:', stats);
         this.stats = stats;
-        this.isLoading = false;
         
-        // Initialiser les graphiques si la vue est prête
-        if (this.completionRateChart) {
-          this.initCharts();
-        }
+        // Charger ensuite les statuts d'annotation de tous les datasets
+        this.datasetsService.getAllDatasetsAnnotationCounts().subscribe({
+          next: (datasetCounts) => {
+            console.log('Dataset annotation counts:', datasetCounts);
+            
+            // Calculer les totaux
+            let completed = 0;
+            let inProgress = 0;
+            let unassigned = 0;
+            
+            datasetCounts.forEach(dataset => {
+              const completionPercentage = parseFloat(dataset.completionPercentage);
+              if (completionPercentage === 100) {
+                completed++;
+              } else if (completionPercentage > 0) {
+                inProgress++;
+              } else {
+                unassigned++;
+              }
+            });
+            
+            // Mettre à jour les stats
+            if (this.stats) {
+              this.stats.completedDatasets = completed;
+              this.stats.inProgressDatasets = inProgress;
+              this.stats.unassignedDatasets = unassigned;
+              this.stats.totalDatasets = datasetCounts.length;
+            }
+            
+            console.log('Updated stats:', {
+              completed,
+              inProgress,
+              unassigned,
+              total: datasetCounts.length
+            });
+            
+            this.isLoading = false;
+            
+            // Initialiser les graphiques si la vue est prête
+            if (this.completionRateChart) {
+              this.initCharts();
+            }
+          },
+          error: (error) => {
+            console.error('Error loading dataset counts:', error);
+            this.isLoading = false;
+          }
+        });
       },
       error: (error) => {
         console.error('Error loading dashboard stats:', error);
@@ -554,8 +599,13 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     startAngle = Math.min(360, Math.max(0, startAngle));
     endAngle = Math.min(360, Math.max(0, endAngle));
     
+    console.log('Creating pie segment - Start angle:', startAngle, 'End angle:', endAngle);
+    
     // Si les angles sont identiques, renvoyer un chemin vide
-    if (startAngle === endAngle) return '';
+    if (startAngle === endAngle) {
+        console.log('Empty segment - angles are equal');
+        return '';
+    }
     
     // Calculer les coordonnées
     const radius = 40; // Rayon du camembert
@@ -576,7 +626,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
     
     // Créer le chemin SVG pour le segment
-    return `M ${centerX} ${centerY} L ${startX} ${startY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
+    const path = `M ${centerX} ${centerY} L ${startX} ${startY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
+    console.log('Generated path:', path);
+    
+    return path;
   }
   
   // Calcule la position du libellé pour un angle donné

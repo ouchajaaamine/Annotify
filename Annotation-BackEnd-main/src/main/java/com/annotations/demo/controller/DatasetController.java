@@ -279,4 +279,67 @@ public class DatasetController {
         datasetService.deleteDataset(id);
         return ResponseEntity.ok(Map.of("message", "Dataset deleted successfully"));
     }
+
+    @GetMapping("/datasets/{id}/download")
+    @Operation(summary = "Download annotated dataset",
+            description = "Downloads the dataset as CSV file if it's fully annotated")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dataset downloaded successfully"),
+            @ApiResponse(responseCode = "400", description = "Dataset is not fully annotated"),
+            @ApiResponse(responseCode = "404", description = "Dataset not found")
+    })
+    public ResponseEntity<?> downloadDataset(@PathVariable Long id) {
+        try {
+            Dataset dataset = datasetService.findDatasetById(id);
+            if (dataset == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Vérifier si le dataset est complètement annoté
+            List<CoupleText> couples = coupleTextService.findAllCoupleTextsByDatasetId(id);
+            int totalCouples = couples.size();
+            int annotatedCouples = 0;
+            
+            for (CoupleText couple : couples) {
+                if (couple.getAnnotations() != null && !couple.getAnnotations().isEmpty()) {
+                    annotatedCouples++;
+                }
+            }
+
+            if (annotatedCouples < totalCouples) {
+                return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Dataset is not fully annotated",
+                               "progress", String.format("%.2f%%", (annotatedCouples * 100.0) / totalCouples)));
+            }
+
+            // Générer le contenu CSV
+            StringBuilder csvContent = new StringBuilder();
+            csvContent.append("Text 1,Text 2,Annotation\n"); // En-têtes CSV
+
+            for (CoupleText couple : couples) {
+                String text1 = couple.getText_1().replace(",", ";"); // Échapper les virgules
+                String text2 = couple.getText_2().replace(",", ";");
+                String annotation = couple.getAnnotations().get(0).getChosenClass(); // Prendre la première annotation
+                
+                csvContent.append(String.format("%s,%s,%s\n", 
+                    text1, 
+                    text2, 
+                    annotation));
+            }
+
+            // Configurer la réponse HTTP
+            String filename = dataset.getName().replaceAll("\\s+", "_") + "_annotated.csv";
+            
+            byte[] csvBytes = csvContent.toString().getBytes();
+            
+            return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+                .body(csvBytes);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Failed to download dataset: " + e.getMessage()));
+        }
+    }
 }
